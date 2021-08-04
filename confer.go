@@ -16,9 +16,9 @@ import (
 func New(conn net.Conn, password string) (net.Conn, error) {
 	dialer := ""
 	if d, ok := conn.(interface{ Dialer() string }); ok {
-		dialer = "cc-" + d.Dialer()
+		dialer = d.Dialer() + "/secret"
 	} else {
-		dialer = "cc://" + conn.RemoteAddr().String()
+		dialer = conn.RemoteAddr().String() + "/secret"
 	}
 
 	cc := &cipherconn{
