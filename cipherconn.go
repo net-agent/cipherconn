@@ -9,6 +9,7 @@ type cipherconn struct {
 	net.Conn
 	encoder cipher.Stream
 	decoder cipher.Stream
+	dialer  string
 }
 
 func (conn *cipherconn) Write(b []byte) (int, error) {
@@ -25,4 +26,8 @@ func (conn *cipherconn) Read(b []byte) (rn int, err error) {
 	}()
 
 	return conn.Conn.Read(b)
+}
+
+func (conn *cipherconn) Dialer() string {
+	return conn.dialer
 }

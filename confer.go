@@ -14,10 +14,16 @@ import (
 
 // New 根据已有连接，构建加密连接
 func New(conn net.Conn, password string) (net.Conn, error) {
-	// return conn, nil
+	dialer := ""
+	if d, ok := conn.(interface{ Dialer() string }); ok {
+		dialer = "cc-" + d.Dialer()
+	} else {
+		dialer = "cc://" + conn.RemoteAddr().String()
+	}
 
 	cc := &cipherconn{
-		Conn: conn,
+		Conn:   conn,
+		dialer: dialer,
 	}
 
 	var err error
